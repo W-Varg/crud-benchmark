@@ -1,0 +1,69 @@
+toma contexto de los manifest del directorio /home/dev/Documents/restringida/dev_proyects/crud-benchmark/k8s-manifests
+perfecto ya puedo ver las replicas y demas..
+ahora con que comandos o herramientas utilizo para para monitorear el peso de las imagenes, con y sin replica, el uso de las cpu, el uso de la ram, dado q tengo 5GB destinado de storage de las imagenes, y 10 GB de ram, entonces quiero ver porcentajes de peso de uso, de comparacion para mostrar el uso en tiempo real cuando empieze a hacer las pruebas de estres con
+
+```
+wrk
+```
+
+dev@quipus:~$ kubectl config current-context
+k3d-crud-benchmark
+dev@quipus:~$ k9s
+dev@quipus:~$ k9s -n crud-benchmark
+dev@quipus:~$ kubectl get pods -n crud-benchmark
+NAME READY STATUS RESTARTS AGE
+bun-crud-85bf6c5895-p9c9x 1/1 Running 0 2d13h
+go-crud-86f86cf785-9nfbm 1/1 Running 0 2d13h
+python-crud-68d55c49d7-5cktw 1/1 Running 0 2d13h
+rust-crud-6ddfd795cb-v9gqw 1/1 Running 0 2d13h
+
+dame un readme con todos los pasos que debo configurar las herramientas:
+actualmento tengo las imagenes de docker
+dev@quipus:~$ docker images
+
+IMAGE ID DISK USAGE CONTENT SIZE EXTRA
+bun_crud:latest 68f34e6bd072 292MB 0B  
+go_crud:latest ecfc83322e14 31.6MB 0B  
+mysql:latest 7ac34d07e4ee 950MB 0B  
+python_crud:latest 2128e7d00aea 261MB 0B  
+rust_crud:latest 3e8306ea9989 101MB 0B  
+y tambien levantados en el cruster
+dev@quipus:~$ kubectl get deployments -n crud-benchmark
+NAME READY UP-TO-DATE AVAILABLE AGE
+bun-crud 3/3 3 3 2d14h
+go-crud 1/1 1 1 2d14h
+python-crud 3/3 3 3 2d14h
+rust-crud 1/1 1 1 2d14h
+dev@quipus:~$
+
+mi apps
+8081: go y gin
+8082: rust y axum
+8083: python y fastapi
+8084: bun y elysia
+
+toma contexto del [README.md](file;file:///home/dev/Documents/restringida/dev_proyects/crud-benchmark/00-k8s-manifests/README.md) en tonde tengo y de los manifest de /home/dev/Documents/restringida/dev_proyects/crud-benchmark/00-k8s-manifests, ahi falta de manifest de java y tambien de /home/dev/Documents/restringida/dev_proyects/crud-benchmark/05-nestjs-fastify entonces actualiza los los manifest y tambien agrega los que faltan, cluego crea el cluster y levantalos, para que corran las 6 aplicaciones,
+tambien crea un docker y un manifest para /home/dev/Documents/restringida/dev_proyects/crud-benchmark/07-nests-express pero este no lo agregues a cluster ya que yo lo hare de forma manual y con los pasos que debo seguir.
+entonces procede con los pasos hasta tenerlo funcionando, y ademas actualiza los puertos
+
+go en 8081
+rust 8082
+python 8083
+bun en 8084
+nest con fastify en 8085
+java en 8086
+y nest con express en 8087 pero no lo agregues esto al cluster y bien generame un agregar_express.md con todos los pasos a seguir para luego hacerlo yo mismo despues
+
+dev@quipus:~/Documents/restringida/dev_proyects/crud-benchmark/06-java-spring$ docker images
+i Info → U In Use
+IMAGE ID DISK USAGE CONTENT SIZE EXTRA
+bun_crud:latest 1ef887009b5b 292MB 0B  
+go_crud:latest 9db0dc84e1fd 31.6MB 0B  
+java_crud:latest 23b3fa6e8ec3 261MB 0B  
+mongo:latest 683091d0bbbf 946MB 0B U  
+mysql:latest 4babd5755458 941MB 0B U  
+nest-fastify:latest c78f72602694 1.29GB 0B  
+postgres:latest 1bf3d6960db4 456MB 0B U  
+python_crud:latest ccf013aac016 261MB 0B  
+redis:alpine 55563f45704d 114MB 0B U  
+rust_crud:latest 70edaba20ccf 101MB 0B
