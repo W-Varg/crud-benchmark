@@ -67,3 +67,170 @@ postgres:latest 1bf3d6960db4 456MB 0B U
 python_crud:latest ccf013aac016 261MB 0B  
 redis:alpine 55563f45704d 114MB 0B U  
 rust_crud:latest 70edaba20ccf 101MB 0B
+
+conclusion
+
+analiza [conclusion.md](file;file:///home/dev/Documents/restringida/dev_proyects/crud-benchmark/conclusion.md) y luego analiza toda esta salida que son de mi terminal:
+curl -X 'GET' \
+ 'http://localhost:8091/products' \
+ -H 'accept: application/json'
+
+curl -X 'GET' \
+'http://localhost:8092/products' \
+-H 'accept: application/json'
+
+curl -X 'GET' http://localhost:8091/health -H 'accept: application/json' &&
+curl -X 'GET' http://localhost:8092/health -H 'accept: application/json' &&
+curl -X 'GET' http://localhost:8093/health -H 'accept: application/json' &&
+curl -X 'GET' http://localhost:8094/health -H 'accept: application/json' &&
+curl -X 'GET' http://localhost:8095/health -H 'accept: application/json' &&
+curl -X 'GET' http://localhost:8096/health -H 'accept: application/json' &&
+curl -X 'GET' http://localhost:8098/health -H 'accept: application/json'
+
+#restart
+kubectl rollout restart deployment rust-crud -n l-namespace
+
+# monitoring
+
+watch -n 1 kubectl top pods -n l-namespace --sort-by=memory
+
+# 1. Prueba de carga contra Go (Gin)
+
+wrk -t4 -c100 -d30s http://localhost:8091/health
+
+# 2. Prueba de carga contra Rust (Axum)
+
+wrk -t4 -c100 -d30s http://localhost:8092/health
+
+# 3. Prueba de carga contra Python (FastAPI)
+
+wrk -t4 -c100 -d30s http://localhost:8093/health
+
+# 4. Prueba de carga contra Bun (Elysia)
+
+wrk -t4 -c100 -d30s http://localhost:8094/health
+
+# 5. Prueba de carga contra NestJS (Fastify)
+
+wrk -t4 -c100 -d30s http://localhost:8095/health
+
+# 6. Prueba de carga contra Java (Spring Boot)
+
+wrk -t4 -c100 -d30s http://localhost:8096/health
+
+# 8. Prueba de carga contra .NET (Minimal API)
+
+wrk -t4 -c100 -d30s http://localhost:8098/health
+
+# salidas de wrk
+
+dev@quipus:~/Documents/restringida/fiscalia/jl2/policia-gw/test-policia$ # 1. Prueba de carga contra Go (Gin)
+wrk -t4 -c100 -d30s http://localhost:8091/health
+
+# 2. Prueba de carga contra Rust (Axum)
+
+wrk -t4 -c100 -d30s http://localhost:8092/health
+
+# 3. Prueba de carga contra Python (FastAPI)
+
+wrk -t4 -c100 -d30s http://localhost:8093/health
+
+# 4. Prueba de carga contra Bun (Elysia)
+
+wrk -t4 -c100 -d30s http://localhost:8094/health
+
+# 5. Prueba de carga contra NestJS (Fastify)
+
+wrk -t4 -c100 -d30s http://localhost:8095/health
+
+# 6. Prueba de carga contra Java (Spring Boot)
+
+wrk -t4 -c100 -d30s http://localhost:8096/health
+
+# 8. Prueba de carga contra .NET (Minimal API)
+
+wrk -t4 -c100 -d30s http://localhost:8098/health
+Running 30s test @ http://localhost:8091/health
+4 threads and 100 connections
+Thread Stats Avg Stdev Max +/- Stdev
+Latency 16.27ms 21.80ms 93.90ms 80.73%
+Req/Sec 5.56k 708.03 11.32k 71.25%
+664196 requests in 30.02s, 87.41MB read
+Requests/sec: 22121.94
+Transfer/sec: 2.91MB
+Running 30s test @ http://localhost:8092/health
+4 threads and 100 connections
+Thread Stats Avg Stdev Max +/- Stdev
+Latency 1.37ms 0.99ms 54.17ms 97.39%
+Req/Sec 18.72k 1.20k 22.48k 80.98%
+2242443 requests in 30.10s, 252.35MB read
+Requests/sec: 74499.46
+Transfer/sec: 8.38MB
+Running 30s test @ http://localhost:8093/health
+4 threads and 100 connections
+Thread Stats Avg Stdev Max +/- Stdev
+Latency 10.75ms 10.38ms 422.79ms 99.29%
+Req/Sec 2.44k 167.12 3.07k 74.25%
+291639 requests in 30.02s, 38.94MB read
+Requests/sec: 9714.21
+Transfer/sec: 1.30MB
+Running 30s test @ http://localhost:8094/health
+4 threads and 100 connections
+Thread Stats Avg Stdev Max +/- Stdev
+Latency 1.59ms 1.35ms 48.81ms 93.77%
+Req/Sec 17.26k 1.68k 22.25k 73.33%
+2060819 requests in 30.00s, 269.25MB read
+Requests/sec: 68686.40
+Transfer/sec: 8.97MB
+Running 30s test @ http://localhost:8095/health
+4 threads and 100 connections
+Thread Stats Avg Stdev Max +/- Stdev
+Latency 3.41ms 9.36ms 405.02ms 99.03%
+Req/Sec 8.80k 1.15k 11.02k 89.91%
+1049953 requests in 30.00s, 186.24MB read
+Requests/sec: 34993.44
+Transfer/sec: 6.21MB
+Running 30s test @ http://localhost:8096/health
+4 threads and 100 connections
+Thread Stats Avg Stdev Max +/- Stdev
+Latency 36.18ms 34.42ms 374.41ms 71.53%
+Req/Sec 828.07 377.08 1.87k 63.17%
+98994 requests in 30.03s, 13.14MB read
+Requests/sec: 3296.31
+Transfer/sec: 448.04KB
+Running 30s test @ http://localhost:8098/health
+4 threads and 100 connections
+Thread Stats Avg Stdev Max +/- Stdev
+Latency 11.55ms 15.70ms 86.38ms 84.40%
+Req/Sec 4.65k 1.06k 6.95k 63.08%
+555588 requests in 30.01s, 91.66MB read
+Requests/sec: 18512.15
+Transfer/sec: 3.05MB
+
+dev@quipus:~/Documents/restringida/dev_proyects/crud-benchmark/00-k8s-manifests$ docker images
+IMAGE ID DISK USAGE CONTENT SIZE EXTRA
+alpine:latest d529dd0c6e55 8.42MB 0B  
+bun_crud:latest 1ef887009b5b 292MB 0B  
+c_crud:latest 33b9f6eae40d 88.6MB 0B  
+collabora/code:latest e14de6e35b44 1.33GB 0B U  
+diegosouzapw/omniroute:latest d5500a44f569 1.78GB 0B U  
+editor-online-backend:latest 35788a9e9d81 94.5MB 0B  
+ghcr.io/k3d-io/k3d-proxy:5.9.0 403bc5ae3546 72.7MB 0B U  
+ghcr.io/k3d-io/k3d-tools:5.9.0 1931b2906173 22.8MB 0B  
+go_crud:latest 9db0dc84e1fd 31.6MB 0B  
+java_crud:latest 23b3fa6e8ec3 261MB 0B  
+mcr.microsoft.com/dotnet/sdk:9.0-alpine 1eb6e0ef5e4d 705MB 0B  
+mongo:latest 683091d0bbbf 946MB 0B U  
+mysql:latest 4babd5755458 941MB 0B U  
+nest-express:latest 846003bf90de 1.28GB 0B  
+nest-fastify:latest 63819be2f2d2 1.29GB 0B  
+net-crud:latest 664dc0f53a55 118MB 0B  
+net_crud:latest a27fcd51e3ea 118MB 0B  
+onlyoffice/documentserver:latest 9f1f9ada4056 3.32GB 0B U  
+postgres:latest 1bf3d6960db4 456MB 0B U  
+python_crud:latest ccf013aac016 261MB 0B  
+rancher/k3s:v1.35.5-k3s1 e4a3cb95dae8 251MB 0B U  
+redis:alpine 55563f45704d 114MB 0B U  
+rust_crud:latest 947ec4448fde 101MB 0B  
+ yo tengo que exponer sobre optimizacion de recursos de memoria ram y la optimizacion de servicios para que ocurra timeout, ademas analiza las imagenes de /home/dev/Documents/restringida/dev_proyects/crud-benchmark/resources, entonces generame un optimizacion.md con todos los puntos que debo explicar, ademas separa en la presentacion tablas de comparacion por tamaño, por uso de memoria, por peticiones soportadas, por que no tienen mucho timeout, entonces ejecuta los comandos, realiza los analizis q necesites, si bien es solo un crud con cada lenguaje la instalacion de mas paquetes, la ejecucion de runtimes, pueden influir, adems de un apartado en la que pueda por cada lenguaje implementar mejores optimizacion de docker, quiza usar imagenes alpine o slim por cada lenguage ya que incluso hay images que pesa gigas,
+explicar tambien xq el peso de cada imagen en un apartado
