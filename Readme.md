@@ -507,25 +507,28 @@ Ejecutamos `wrk` configurando **4 hilos de ejecución (`-t4`)**, **100 conexione
 
 ```bash
 # 1. Prueba de carga contra Go (Gin)
-wrk -t4 -c100 -d30s http://localhost:8081/health
+wrk -t4 -c100 -d30s http://localhost:8091/health
 
 # 2. Prueba de carga contra Rust (Axum)
-wrk -t4 -c100 -d30s http://localhost:8082/health
+wrk -t4 -c100 -d30s http://localhost:8092/health
 
 # 3. Prueba de carga contra Python (FastAPI)
-wrk -t4 -c100 -d30s http://localhost:8083/health
+wrk -t4 -c100 -d30s http://localhost:8093/health
 
 # 4. Prueba de carga contra Bun (Elysia)
-wrk -t4 -c100 -d30s http://localhost:8084/health
+wrk -t4 -c100 -d30s http://localhost:8094/health
 
 # 5. Prueba de carga contra NestJS (Fastify)
-wrk -t4 -c100 -d30s http://localhost:8085/health
+wrk -t4 -c100 -d30s http://localhost:8095/health
 
 # 6. Prueba de carga contra Java (Spring Boot)
-wrk -t4 -c100 -d30s http://localhost:8086/health
+wrk -t4 -c100 -d30s http://localhost:8096/health
 
 # 7. Prueba de carga contra NestJS (Express)
-wrk -t4 -c100 -d30s http://localhost:8087/health
+wrk -t4 -c100 -d30s http://localhost:8097/health
+
+# 8. Prueba de carga contra .NET (Minimal API)
+wrk -t4 -c100 -d30s http://localhost:8098/health
 ```
 
 _Explicación de parámetros para Juniors_:
@@ -723,7 +726,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nuevo-servicio
-  namespace: crud-benchmark
+  namespace: l-namespace
   labels:
     app: nuevo-servicio
 spec:
@@ -763,7 +766,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nuevo-servicio
-  namespace: crud-benchmark
+  namespace: l-namespace
 spec:
   type: LoadBalancer
   selector:
